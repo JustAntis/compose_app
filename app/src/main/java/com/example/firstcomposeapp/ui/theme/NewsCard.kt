@@ -95,7 +95,7 @@ private fun PostHeader() {
                 .padding(8.dp)
                 .size(50.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onBackground)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(8.dp),
         )
         Column() {
