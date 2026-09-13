@@ -12,26 +12,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Black900,
-    onPrimaryFixedVariant = Black900,
-    secondary = Black900,
-    onPrimary = Color.White,
-    onSecondary = Black500
+    surface = Black900,
+    onSurface = Color.White,
+    secondaryContainer = Black900,
+    onSecondaryContainer = Color.White,
+    onSurfaceVariant = Black500
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color.White,
-    onPrimaryFixedVariant = Color.White,
-    secondary = Color.White,
-    onPrimary = Black900,
-    onSecondary = Black500
+    surface = Color.White,
+    onSurface = Black900,
+    secondaryContainer = Color.White,
+    onSecondaryContainer = Black900,
+    onSurfaceVariant = Black500
 )
 
 @Composable
 fun FirstComposeAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
