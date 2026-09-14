@@ -1,5 +1,6 @@
 package com.example.firstcomposeapp.ui.theme
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +43,7 @@ fun InstagramProfile(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val isFollowed = viewModel.isFollowing.collectAsState()
+    Log.d("RECOMPOSITION","InstagramProfile")
     Card(
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background),
         shape = RoundedCornerShape(
@@ -52,6 +55,7 @@ fun InstagramProfile(
             .padding(20.dp)
 
     ) {
+        Log.d("RECOMPOSITION","Card")
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,7 +85,7 @@ fun InstagramProfile(
             Text(text = "#YoursToMake")
             Text(text = "www.youtube.com/just_antis")
             FollowButton(
-                isFollowed = isFollowed.value
+                isFollowed = isFollowed
             ){
                 viewModel.changeFollowingStatus()
             }
@@ -89,19 +93,20 @@ fun InstagramProfile(
     }
 }
 @Composable
-private fun FollowButton(isFollowed: Boolean, clickListener:() -> Unit){
+private fun FollowButton(isFollowed: State<Boolean>, clickListener:() -> Unit){
     Button(
         onClick = { clickListener() },
         border = BorderStroke(2.dp, Color.Blue),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isFollowed){
+            containerColor = if (isFollowed.value){
                 MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
             }else {
                 MaterialTheme.colorScheme.primary
             }
         )
     ) {
-        val text = if (isFollowed){
+        Log.d("RECOMPOSITION","Button")
+        val text = if (isFollowed.value){
             "Unfollow"
         } else{
             "Follow"
