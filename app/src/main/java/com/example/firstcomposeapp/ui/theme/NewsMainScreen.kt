@@ -1,5 +1,6 @@
 package com.example.firstcomposeapp.ui.theme
 
+import android.util.Log
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -31,7 +32,8 @@ import kotlinx.coroutines.launch
 )
 @Composable
 fun MainScreen() {
-    val snackBarHostState = SnackbarHostState()
+    val snackBarHostState = remember { SnackbarHostState() }
+    Log.d("MainScreen", snackBarHostState.currentSnackbarData.toString())
     val scope = rememberCoroutineScope()
     val fabIsVisible = remember { mutableStateOf(true) }
     Scaffold(
