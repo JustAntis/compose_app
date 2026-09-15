@@ -31,7 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.firstcomposeapp.MainViewModel
+import com.example.firstcomposeapp.MainViewModelInstagram
 import com.example.firstcomposeapp.R
 
 
@@ -40,7 +40,7 @@ fun InstagramProfile(
     posts: String = "340",
     followers: String = "210",
     followings: String = "33",
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModelInstagram = hiltViewModel()
 ) {
     val isFollowed = viewModel.isFollowing.collectAsState()
     Log.d("RECOMPOSITION","InstagramProfile")

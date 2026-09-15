@@ -1,48 +1,28 @@
 package com.example.firstcomposeapp.ui.theme
 
-import android.util.Log
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import kotlinx.coroutines.launch
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.firstcomposeapp.MainViewModel
 
-@Preview(
-    name = "Light - Pixel 10",
-    device = Devices.PHONE,
-    showBackground = true,
-    showSystemUi = true
-)
 @Composable
-fun MainScreen() {
-    val snackBarHostState = remember { SnackbarHostState() }
-    Log.d("MainScreen", snackBarHostState.currentSnackbarData.toString())
-    val scope = rememberCoroutineScope()
-    val fabIsVisible = remember { mutableStateOf(true) }
+fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
+
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState)
-        },
         bottomBar = {
-            NavigationBar() {
-                val state = remember { mutableStateOf(0) }
+            NavigationBar {
+                val state = remember { mutableIntStateOf(0) }
                 val items = listOf(
                     NavigationItem.Home,
                     NavigationItem.Profile,
@@ -50,8 +30,8 @@ fun MainScreen() {
                 )
                 items.forEachIndexed { index, navigationItem ->
                     NavigationBarItem(
-                        selected = state.value == index,
-                        onClick = { state.value = index },
+                        selected = state.intValue == index,
+                        onClick = { state.intValue = index },
                         icon = {
                             Icon(
                                 imageVector = navigationItem.icon,
@@ -63,29 +43,23 @@ fun MainScreen() {
                 }
             }
         },
-        floatingActionButton = {
-            if (fabIsVisible.value) {
-                FloatingActionButton(
-                    onClick = {
-                        scope.launch {
-                            val action = snackBarHostState.showSnackbar(
-                                message = "This is snack bar",
-                                actionLabel = "Hide FAB",
-                                duration = SnackbarDuration.Long
-                            )
-                            if (action == SnackbarResult.ActionPerformed) {
-                                fabIsVisible.value = false
-                            }
-                        }
-                    },
-                    shape = CircleShape,
-                    containerColor = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    Icon(Icons.Filled.Favorite, contentDescription = null)
-                }
+    ) { it ->
+        val feedPost = viewModel.feedPost.collectAsState()
+        NewsCard(
+            modifier = Modifier.padding(
+                top = 30.dp,
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 16.dp
+            ),
+            feedPost = feedPost.value,
+            onCommentClickListener = {  },
+            onLikeClickListener = {  },
+            onShareClickListener = {  },
+            onViewsClickListener = { newItem ->
+                viewModel.onClickStatistic(newItem)
             }
-        }
-    ) {
+        )
         it
     }
 }
