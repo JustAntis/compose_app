@@ -11,29 +11,53 @@ import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
 class MainViewModel @Inject constructor(): ViewModel() {
-    private val _feedPost = MutableStateFlow(FeedPost())
+
+    private val initialList = mutableListOf<FeedPost>().apply {
+        repeat(100){
+            add(FeedPost(publicationDate = it.toString()))
+        }
+    }
+    private val _feedPost = MutableStateFlow<List<FeedPost>>(initialList)
     val feedPost = _feedPost.asStateFlow()
 
-    fun onClickStatistic(item: StatisticItem){
+    fun onClickStatistic(item: StatisticItem, feedPost: FeedPost){
         when(item.type){
-            StatisticType.VIEWS -> updateCount(item)
+            StatisticType.VIEWS -> updateCount(item = item, feedPost = feedPost)
             StatisticType.COMMENTS -> { }
             StatisticType.SHARES -> { }
             StatisticType.LIKES -> { }
         }
     }
 
-    private fun updateCount(item: StatisticItem){
-        val oldStatistics = feedPost.value.statistics
-        val newStatistics = oldStatistics.toMutableList().apply {
+    private fun updateStats(feedPost: FeedPost, item: StatisticItem): List<StatisticItem>{
+        val oldStat = feedPost.statistics
+        val newStat = oldStat.toMutableList().apply {
             replaceAll{oldItem ->
                 if (oldItem.type == item.type){
                     oldItem.copy(count = oldItem.count + 1)
-                } else {
+                }else{
                     oldItem
                 }
             }
         }
-        _feedPost.value = feedPost.value.copy(statistics = newStatistics)
+        return newStat
+    }
+
+    fun delete(feedPost: FeedPost){
+        val modifiedList = _feedPost.value.toMutableList()
+        modifiedList.remove(feedPost)
+        _feedPost.value = modifiedList
+    }
+    private fun updateCount(feedPost: FeedPost, item: StatisticItem){
+        val modifiedList = _feedPost.value.toMutableList().apply {
+            replaceAll {oldFeedPost ->
+                if (oldFeedPost === feedPost){
+                    oldFeedPost.copy(statistics = updateStats(feedPost = feedPost, item = item))
+                }else{
+                    oldFeedPost
+                }
+            }
+        }
+        _feedPost.value = modifiedList
     }
 }
