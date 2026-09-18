@@ -3,6 +3,7 @@ package com.example.firstcomposeapp.domain
 import com.example.firstcomposeapp.R
 
 data class FeedPost(
+    val id: Int = 0,
     val communityName: String = "/developers",
     val publicationDate: String = "9:43",
     val avatarResId: Int = R.drawable.outline_alt_route_24,

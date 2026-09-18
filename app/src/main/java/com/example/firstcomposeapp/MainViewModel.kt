@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.firstcomposeapp.domain.FeedPost
 import com.example.firstcomposeapp.domain.StatisticItem
 import com.example.firstcomposeapp.domain.StatisticType
+import com.example.firstcomposeapp.ui.theme.NavigationItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,20 +13,26 @@ import kotlinx.coroutines.flow.asStateFlow
 @HiltViewModel
 class MainViewModel @Inject constructor(): ViewModel() {
 
+    private val _selectedNavItem = MutableStateFlow<NavigationItem>(NavigationItem.Home)
+    val selectedNavItem = _selectedNavItem.asStateFlow()
     private val initialList = mutableListOf<FeedPost>().apply {
-        repeat(100){
-            add(FeedPost(publicationDate = it.toString()))
+        repeat(10){
+            add(FeedPost(id = it, publicationDate = it.toString()))
         }
     }
-    private val _feedPost = MutableStateFlow<List<FeedPost>>(initialList)
-    val feedPost = _feedPost.asStateFlow()
+
+    fun selectNavItem(item: NavigationItem){
+        _selectedNavItem.value = item
+    }
+    private val _feedPosts = MutableStateFlow<List<FeedPost>>(initialList)
+    val feedPosts = _feedPosts.asStateFlow()
 
     fun onClickStatistic(item: StatisticItem, feedPost: FeedPost){
         when(item.type){
-            StatisticType.VIEWS -> updateCount(item = item, feedPost = feedPost)
+            StatisticType.VIEWS -> { }
             StatisticType.COMMENTS -> { }
             StatisticType.SHARES -> { }
-            StatisticType.LIKES -> { }
+            StatisticType.LIKES -> updateCount(item = item, feedPost = feedPost)
         }
     }
 
@@ -44,20 +51,20 @@ class MainViewModel @Inject constructor(): ViewModel() {
     }
 
     fun delete(feedPost: FeedPost){
-        val modifiedList = _feedPost.value.toMutableList()
+        val modifiedList = _feedPosts.value.toMutableList()
         modifiedList.remove(feedPost)
-        _feedPost.value = modifiedList
+        _feedPosts.value = modifiedList
     }
     private fun updateCount(feedPost: FeedPost, item: StatisticItem){
-        val modifiedList = _feedPost.value.toMutableList().apply {
+        val modifiedList = _feedPosts.value.toMutableList().apply {
             replaceAll {oldFeedPost ->
-                if (oldFeedPost === feedPost){
+                if (oldFeedPost.id == feedPost.id){
                     oldFeedPost.copy(statistics = updateStats(feedPost = feedPost, item = item))
                 }else{
                     oldFeedPost
                 }
             }
         }
-        _feedPost.value = modifiedList
+        _feedPosts.value = modifiedList
     }
 }

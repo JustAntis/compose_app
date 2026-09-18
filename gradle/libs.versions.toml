@@ -11,9 +11,12 @@ activityCompose = "1.13.0"
 kotlin = "2.2.10"
 composeBom = "2026.02.01"
 ksp = "2.3.10"
+navigation_version = "2.10.1"
+
 
 
 [libraries]
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation_version" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }
