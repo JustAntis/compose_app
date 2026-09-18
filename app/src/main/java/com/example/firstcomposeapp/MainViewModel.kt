@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import com.example.firstcomposeapp.domain.FeedPost
 import com.example.firstcomposeapp.domain.StatisticItem
 import com.example.firstcomposeapp.domain.StatisticType
-import com.example.firstcomposeapp.ui.theme.NavigationItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,17 +11,10 @@ import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
 class MainViewModel @Inject constructor(): ViewModel() {
-
-    private val _selectedNavItem = MutableStateFlow<NavigationItem>(NavigationItem.Home)
-    val selectedNavItem = _selectedNavItem.asStateFlow()
     private val initialList = mutableListOf<FeedPost>().apply {
         repeat(10){
             add(FeedPost(id = it, publicationDate = it.toString()))
         }
-    }
-
-    fun selectNavItem(item: NavigationItem){
-        _selectedNavItem.value = item
     }
     private val _feedPosts = MutableStateFlow<List<FeedPost>>(initialList)
     val feedPosts = _feedPosts.asStateFlow()
