@@ -9,21 +9,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.example.firstcomposeapp.navigation.AppNavGraph
+import com.example.firstcomposeapp.navigation.rememberNavigationState
 
 @Composable
 fun MainScreen() {
-    val navHostController = rememberNavController()
+    val navigationState = rememberNavigationState()
+
     Scaffold(
         bottomBar = {
             NavigationBar {
-                val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+                val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
 
                 val items = listOf(
@@ -34,7 +35,9 @@ fun MainScreen() {
                 items.forEach { navigationItem ->
                     NavigationBarItem(
                         selected = currentRoute == navigationItem.screen.route,
-                        onClick = { navHostController.navigate(navigationItem.screen.route) },
+                        onClick = {
+                            navigationState.navigateTo(navigationItem.screen.route)
+                        },
                         icon = {
                             Icon(
                                 imageVector = navigationItem.icon,
@@ -48,7 +51,7 @@ fun MainScreen() {
         }
     ) { paddingValues ->
         AppNavGraph(
-            navHostController = navHostController,
+            navHostController = navigationState.navHostController,
             homeScreenContent = {
                 HomeScreen(paddingValues = paddingValues)
             },
@@ -63,8 +66,12 @@ fun MainScreen() {
 }
 
 @Composable
-private fun TextCounter(name: String){
-    val count = remember { mutableIntStateOf(0) }
+private fun TextCounter(name: String) {
+    val count = rememberSaveable { mutableIntStateOf(0) }
 
-    Text(text = "Screen: $name, Count: ${count.intValue}", modifier = Modifier.clickable{ count.intValue++ }, color = Color.Black)
+    Text(
+        text = "Screen: $name, Count: ${count.intValue}",
+        modifier = Modifier.clickable { count.intValue++ },
+        color = Color.Black
+    )
 }
