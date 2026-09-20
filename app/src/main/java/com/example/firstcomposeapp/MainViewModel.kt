@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.firstcomposeapp.domain.FeedPost
 import com.example.firstcomposeapp.domain.StatisticItem
 import com.example.firstcomposeapp.domain.StatisticType
+import com.example.firstcomposeapp.ui.theme.HomeScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +17,10 @@ class MainViewModel @Inject constructor(): ViewModel() {
             add(FeedPost(id = it, publicationDate = it.toString()))
         }
     }
-    private val _feedPosts = MutableStateFlow<List<FeedPost>>(initialList)
-    val feedPosts = _feedPosts.asStateFlow()
+
+    val initialState = HomeScreenState.Posts(initialList)
+    private val _screenState = MutableStateFlow<HomeScreenState>(initialState)
+    val screenState = _screenState.asStateFlow()
 
     fun onClickStatistic(item: StatisticItem, feedPost: FeedPost){
         when(item.type){
@@ -43,12 +46,12 @@ class MainViewModel @Inject constructor(): ViewModel() {
     }
 
     fun delete(feedPost: FeedPost){
-        val modifiedList = _feedPosts.value.toMutableList()
+        val modifiedList = _screenState.value.toMutableList()
         modifiedList.remove(feedPost)
-        _feedPosts.value = modifiedList
+        _screenState.value = modifiedList
     }
     private fun updateCount(feedPost: FeedPost, item: StatisticItem){
-        val modifiedList = _feedPosts.value.toMutableList().apply {
+        val modifiedList = _screenState.value.toMutableList().apply {
             replaceAll {oldFeedPost ->
                 if (oldFeedPost.id == feedPost.id){
                     oldFeedPost.copy(statistics = updateStats(feedPost = feedPost, item = item))
@@ -57,6 +60,6 @@ class MainViewModel @Inject constructor(): ViewModel() {
                 }
             }
         }
-        _feedPosts.value = modifiedList
+        _screenState.value = modifiedList
     }
 }
