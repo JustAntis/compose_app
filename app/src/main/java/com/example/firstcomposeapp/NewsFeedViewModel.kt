@@ -2,42 +2,25 @@ package com.example.firstcomposeapp
 
 import androidx.lifecycle.ViewModel
 import com.example.firstcomposeapp.domain.FeedPost
-import com.example.firstcomposeapp.domain.PostComment
 import com.example.firstcomposeapp.domain.StatisticItem
 import com.example.firstcomposeapp.domain.StatisticType
-import com.example.firstcomposeapp.ui.theme.HomeScreenState
+import com.example.firstcomposeapp.ui.theme.NewsFeedScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
-class MainViewModel @Inject constructor(): ViewModel() {
+class NewsFeedViewModel @Inject constructor(): ViewModel() {
     private val initialList = mutableListOf<FeedPost>().apply {
         repeat(10){
             add(FeedPost(id = it, publicationDate = it.toString()))
         }
     }
-    private val comments = mutableListOf<PostComment>().apply {
-        repeat(10){
-            add(PostComment(id = it))
-        }
-    }
-
-
-    val initialState = HomeScreenState.Posts(initialList)
-    private val _screenState = MutableStateFlow<HomeScreenState>(initialState)
+    val initialState = NewsFeedScreenState.Posts(initialList)
+    private val _screenState = MutableStateFlow<NewsFeedScreenState>(initialState)
     val screenState = _screenState.asStateFlow()
 
-    var savedState: HomeScreenState = initialState
-    fun showComments(feedPost: FeedPost){
-        savedState = _screenState.value
-        _screenState.value = HomeScreenState.Comments(feedPost, comments)
-    }
-
-    fun closeComments(){
-        _screenState.value = savedState
-    }
 
     fun onClickStatistic(item: StatisticItem, feedPost: FeedPost){
         when(item.type){
@@ -64,14 +47,14 @@ class MainViewModel @Inject constructor(): ViewModel() {
 
     fun delete(feedPost: FeedPost){
         val currentState = screenState.value
-        if (currentState !is HomeScreenState.Posts) return
+        if (currentState !is NewsFeedScreenState.Posts) return
         val modifiedList = currentState.posts.toMutableList()
         modifiedList.remove(feedPost)
-        _screenState.value = HomeScreenState.Posts(modifiedList)
+        _screenState.value = NewsFeedScreenState.Posts(modifiedList)
     }
     private fun updateCount(feedPost: FeedPost, item: StatisticItem){
         val currentState = screenState.value
-        if (currentState !is HomeScreenState.Posts) return
+        if (currentState !is NewsFeedScreenState.Posts) return
         val modifiedList = currentState.posts.toMutableList().apply {
             replaceAll {oldFeedPost ->
                 if (oldFeedPost.id == feedPost.id){
@@ -81,6 +64,6 @@ class MainViewModel @Inject constructor(): ViewModel() {
                 }
             }
         }
-        _screenState.value = HomeScreenState.Posts(modifiedList)
+        _screenState.value = NewsFeedScreenState.Posts(modifiedList)
     }
 }

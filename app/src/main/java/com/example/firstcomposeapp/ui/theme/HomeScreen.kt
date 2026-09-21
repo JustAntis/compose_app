@@ -1,6 +1,5 @@
 package com.example.firstcomposeapp.ui.theme
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,39 +19,36 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.firstcomposeapp.MainViewModel
+import com.example.firstcomposeapp.NewsFeedViewModel
 import com.example.firstcomposeapp.domain.FeedPost
 
 @Composable
-fun HomeScreen(viewModel: MainViewModel = hiltViewModel(), paddingValues: PaddingValues) {
+fun HomeScreen(
+    viewModel: NewsFeedViewModel = hiltViewModel(),
+    paddingValues: PaddingValues,
+    onCommentsClickListener:(FeedPost) -> Unit
+) {
     val screenState = viewModel.screenState.collectAsState()
 
     when(val currentState = screenState.value){
-        is HomeScreenState.Comments -> {
-            CommentsScreen(
-                feedPost = currentState.feedPost,
-                comments = currentState.comments,
-                onBackPressed = {
-
-                }
-            )
-            BackHandler {
-                viewModel.closeComments()
-            }
-        }
-
-        is HomeScreenState.Posts -> FeedPosts(
+        is NewsFeedScreenState.Posts -> FeedPosts(
             viewModel = viewModel,
             paddingValues = paddingValues,
-            posts = currentState.posts
+            posts = currentState.posts,
+            onCommentsClickListener = onCommentsClickListener
         )
-        HomeScreenState.Initial -> { }
+        NewsFeedScreenState.Initial -> { }
     }
 
 }
 
 @Composable
-fun FeedPosts(viewModel: MainViewModel, paddingValues: PaddingValues, posts: List<FeedPost>){
+fun FeedPosts(
+    viewModel: NewsFeedViewModel,
+    paddingValues: PaddingValues,
+    posts: List<FeedPost>,
+    onCommentsClickListener:(FeedPost) -> Unit
+){
     LazyColumn(contentPadding = paddingValues, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items(posts, key = { it.hashCode() }) { feedPost ->
             val dismissState = rememberSwipeToDismissBoxState()
@@ -88,7 +84,7 @@ fun FeedPosts(viewModel: MainViewModel, paddingValues: PaddingValues, posts: Lis
                         .fillMaxSize(),
                     feedPost = feedPost,
                     onCommentClickListener = {
-                        viewModel.showComments(feedPost)
+                        onCommentsClickListener(feedPost)
                     },
                     onLikeClickListener = {
                         viewModel.onClickStatistic(feedPost = feedPost, item = it)

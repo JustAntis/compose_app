@@ -20,42 +20,50 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.firstcomposeapp.domain.FeedPost
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.firstcomposeapp.CommentsViewModel
 import com.example.firstcomposeapp.domain.PostComment
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentsScreen(
-    feedPost: FeedPost,
-    comments: List<PostComment>,
+    viewModel: CommentsViewModel = hiltViewModel(),
     onBackPressed: () -> Unit
 ){
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = "Comments for FeedPost Id:${feedPost.id}", fontSize = 24.sp)
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        onBackPressed()
-                    }) {
-                        Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
+    val state = viewModel.screenState.collectAsState()
+    val currentState = state.value
+    if (currentState is CommentsScreenState.Comments) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Comments for FeedPost Id:${currentState.feedPost.id}", fontSize = 24.sp)
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            onBackPressed()
+                        }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = null
+                            )
+                        }
                     }
-                }
-            )
-        }
-    ) {paddingValues ->
-        LazyColumn(
-            contentPadding = paddingValues
+                )
+            }
+        ) { paddingValues ->
+            LazyColumn(
+                contentPadding = paddingValues
             ) {
-            items(comments, key = {it.id}){comments ->
-                CommentItem(comments)
+                items(currentState.comments, key = { it.id }) { comments ->
+                    CommentItem(comments)
+                }
             }
         }
     }
