@@ -30,7 +30,11 @@ import com.example.firstcomposeapp.domain.PostComment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommentsScreen(feedPost: FeedPost, comments: List<PostComment>){
+fun CommentsScreen(
+    feedPost: FeedPost,
+    comments: List<PostComment>,
+    onBackPressed: () -> Unit
+){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -38,7 +42,9 @@ fun CommentsScreen(feedPost: FeedPost, comments: List<PostComment>){
                     Text(text = "Comments for FeedPost Id:${feedPost.id}", fontSize = 24.sp)
                 },
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        onBackPressed()
+                    }) {
                         Icon(imageVector = Icons.AutoMirrored.Default.ArrowBack, contentDescription = null)
                     }
                 }

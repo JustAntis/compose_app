@@ -1,5 +1,6 @@
 package com.example.firstcomposeapp.ui.theme
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,10 +28,18 @@ fun HomeScreen(viewModel: MainViewModel = hiltViewModel(), paddingValues: Paddin
     val screenState = viewModel.screenState.collectAsState()
 
     when(val currentState = screenState.value){
-        is HomeScreenState.Comments -> CommentsScreen(
-            feedPost = currentState.feedPost,
-            comments = currentState.comments
-        )
+        is HomeScreenState.Comments -> {
+            CommentsScreen(
+                feedPost = currentState.feedPost,
+                comments = currentState.comments,
+                onBackPressed = {
+
+                }
+            )
+            BackHandler {
+                viewModel.closeComments()
+            }
+        }
 
         is HomeScreenState.Posts -> FeedPosts(
             viewModel = viewModel,
@@ -79,7 +88,7 @@ fun FeedPosts(viewModel: MainViewModel, paddingValues: PaddingValues, posts: Lis
                         .fillMaxSize(),
                     feedPost = feedPost,
                     onCommentClickListener = {
-                        viewModel.onClickStatistic(feedPost = feedPost, item = it)
+                        viewModel.showComments(feedPost)
                     },
                     onLikeClickListener = {
                         viewModel.onClickStatistic(feedPost = feedPost, item = it)
