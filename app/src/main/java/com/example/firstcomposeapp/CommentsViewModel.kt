@@ -4,22 +4,25 @@ import androidx.lifecycle.ViewModel
 import com.example.firstcomposeapp.domain.FeedPost
 import com.example.firstcomposeapp.domain.PostComment
 import com.example.firstcomposeapp.ui.theme.CommentsScreenState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-@HiltViewModel
-class CommentsViewModel @Inject constructor(): ViewModel() {
+@HiltViewModel(assistedFactory = CommentsViewModel.Factory::class)
+class CommentsViewModel @AssistedInject constructor(
+    @Assisted  val feedPost: FeedPost
+): ViewModel() {
 
     private val _stateScreen = MutableStateFlow<CommentsScreenState>(CommentsScreenState.Initial)
     val screenState: StateFlow<CommentsScreenState> = _stateScreen.asStateFlow()
 
     init {
-        loadComments(FeedPost())
+        loadComments(feedPost = feedPost)
     }
-
     fun loadComments(feedPost: FeedPost){
         val comments = mutableListOf<PostComment>().apply {
             repeat(10){
@@ -27,5 +30,9 @@ class CommentsViewModel @Inject constructor(): ViewModel() {
             }
         }
         _stateScreen.value = CommentsScreenState.Comments(feedPost, comments)
+    }
+    @AssistedFactory
+    interface Factory {
+        fun create(feedPost: FeedPost): CommentsViewModel
     }
 }

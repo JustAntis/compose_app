@@ -27,13 +27,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.firstcomposeapp.CommentsViewModel
+import com.example.firstcomposeapp.domain.FeedPost
 import com.example.firstcomposeapp.domain.PostComment
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentsScreen(
-    viewModel: CommentsViewModel = hiltViewModel(),
+    feedPost: FeedPost,
+    viewModel: CommentsViewModel = hiltViewModel(
+        creationCallback = {
+            factory: CommentsViewModel.Factory -> factory.create(feedPost = feedPost)
+        }
+    ),
     onBackPressed: () -> Unit
 ){
     val state = viewModel.screenState.collectAsState()
