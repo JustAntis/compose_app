@@ -6,7 +6,6 @@ sealed class Screen (
     object NewsFeed: Screen(ROUTE_NEWS_FEED)
     object Favourite: Screen(ROUTE_FAVOURITE)
     object Profile: Screen(ROUTE_PROFILE)
-
     object Home: Screen(ROUTE_HOME)
     object Comments: Screen(ROUTE_COMMENTS)
 
