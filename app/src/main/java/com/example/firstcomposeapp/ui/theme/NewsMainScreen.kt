@@ -7,18 +7,14 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.firstcomposeapp.domain.FeedPost
 import com.example.firstcomposeapp.navigation.AppNavGraph
 import com.example.firstcomposeapp.navigation.rememberNavigationState
 
@@ -26,7 +22,7 @@ import com.example.firstcomposeapp.navigation.rememberNavigationState
 fun MainScreen() {
     val navigationState = rememberNavigationState()
 
-    val commentsToPosts: MutableState<FeedPost?> = remember { mutableStateOf(null) }
+
     Scaffold(
         bottomBar = {
             NavigationBar {
@@ -68,8 +64,7 @@ fun MainScreen() {
                 HomeScreen(
                     paddingValues = paddingValues,
                     onCommentsClickListener = {
-                        commentsToPosts.value = it
-                        navigationState.navigateToComments()
+                        navigationState.navigateToComments(it)
                     }
                 )
             },
@@ -79,12 +74,12 @@ fun MainScreen() {
             favouriteScreenContent = {
                 TextCounter("Favourite")
             },
-            commentsScreenContent = {
+            commentsScreenContent = {feedPost ->
                 CommentsScreen(
                     onBackPressed = {
                         navigationState.navHostController.popBackStack()
                     },
-                    feedPost = commentsToPosts.value!!
+                    feedPost = feedPost
                 )
             }
         )
