@@ -19,7 +19,7 @@ class NavigationState(
             restoreState = true
         }
     }
-    fun navigateToComments(feedPost: FeedPost){//comments/feedPost
+    fun navigateToComments(feedPost: FeedPost){//comments/feedPost/
         navHostController.navigate(Screen.Comments.getRouteWithArgs(feedPost))
     }
 }
