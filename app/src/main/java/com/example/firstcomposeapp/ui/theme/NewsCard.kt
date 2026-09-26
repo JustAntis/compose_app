@@ -1,6 +1,5 @@
 package com.example.firstcomposeapp.ui.theme
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -25,15 +24,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.firstcomposeapp.domain.FeedPost
-import com.example.firstcomposeapp.domain.StatisticItem
-import com.example.firstcomposeapp.domain.StatisticType
+import coil3.compose.AsyncImage
+import com.example.firstcomposeapp.domain.entities.FeedPost
+import com.example.firstcomposeapp.domain.entities.StatisticItem
+import com.example.firstcomposeapp.domain.entities.StatisticType
 
 
 @Composable
@@ -49,13 +48,17 @@ fun NewsCard(
         Column {
             PostHeader(feedPost = feedPost)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = feedPost.contentText,
-                fontSize = 18.sp
-            )
-            Image(
-                painter = painterResource(id = feedPost.contentImageResId),
-                contentDescription = null
+            feedPost.contentText?.let {
+                Text(
+                    text = it,
+                    fontSize = 18.sp
+                )
+            }
+            AsyncImage(
+                modifier = Modifier.fillMaxWidth(),
+                model = feedPost.contentImageUrl,
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth
             )
             PostInfo(
                 statistics = feedPost.statistics,
@@ -147,12 +150,12 @@ private fun PostHeader(feedPost: FeedPost) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 30.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+
     ) {
-        Icon(
-            painter = painterResource(feedPost.avatarResId),
+        AsyncImage(
+            model = feedPost.avatarUrl,
             contentDescription = "",
-            tint = Color.LightGray,
             modifier = Modifier
                 .padding(8.dp)
                 .size(50.dp)
