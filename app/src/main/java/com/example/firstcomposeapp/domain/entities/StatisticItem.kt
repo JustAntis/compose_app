@@ -1,7 +1,7 @@
-package com.example.firstcomposeapp.domain
+package com.example.firstcomposeapp.domain.entities
 
-import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class StatisticItem(

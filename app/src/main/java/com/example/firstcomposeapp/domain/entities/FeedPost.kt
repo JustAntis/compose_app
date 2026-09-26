@@ -1,11 +1,10 @@
-package com.example.firstcomposeapp.domain
+package com.example.firstcomposeapp.domain.entities
 
 import android.os.Build
 import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import androidx.navigation.NavType
 import androidx.savedstate.SavedState
-import com.example.firstcomposeapp.R
 import com.google.gson.Gson
 import kotlinx.parcelize.Parcelize
 
@@ -14,9 +13,9 @@ data class FeedPost(
     val id: Int = 0,
     val communityName: String = "/developers",
     val publicationDate: String = "9:43",
-    val avatarResId: Int = R.drawable.outline_alt_route_24,
-    val contentText: String = "Favourite",
-    val contentImageResId: Int = R.drawable.io_mem,
+    val avatarUrl: String?,
+    val contentText: String? = "Favourite",
+    val contentImageUrl: String?,
     val statistics: List<StatisticItem> = listOf(
         StatisticItem(StatisticType.VIEWS, 966),
         StatisticItem(StatisticType.COMMENTS, 43),

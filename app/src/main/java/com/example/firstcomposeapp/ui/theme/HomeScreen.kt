@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.firstcomposeapp.NewsFeedViewModel
-import com.example.firstcomposeapp.domain.FeedPost
+import com.example.firstcomposeapp.domain.entities.FeedPost
 
 @Composable
 fun HomeScreen(

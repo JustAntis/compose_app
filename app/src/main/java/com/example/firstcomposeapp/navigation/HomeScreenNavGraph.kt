@@ -7,7 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.example.firstcomposeapp.domain.FeedPost
+import com.example.firstcomposeapp.domain.entities.FeedPost
 
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)

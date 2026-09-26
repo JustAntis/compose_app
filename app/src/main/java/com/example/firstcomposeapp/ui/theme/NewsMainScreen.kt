@@ -1,5 +1,7 @@
 package com.example.firstcomposeapp.ui.theme
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -18,6 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.firstcomposeapp.navigation.AppNavGraph
 import com.example.firstcomposeapp.navigation.rememberNavigationState
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun MainScreen() {
     val navigationState = rememberNavigationState()

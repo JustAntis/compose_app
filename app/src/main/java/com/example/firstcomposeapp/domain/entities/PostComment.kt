@@ -1,4 +1,4 @@
-package com.example.firstcomposeapp.domain
+package com.example.firstcomposeapp.domain.entities
 
 import com.example.firstcomposeapp.R
 
