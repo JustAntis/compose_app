@@ -1,7 +1,7 @@
 package com.example.firstcomposeapp.ui.theme
 
-import com.example.firstcomposeapp.domain.FeedPost
-import com.example.firstcomposeapp.domain.PostComment
+import com.example.firstcomposeapp.domain.entities.FeedPost
+import com.example.firstcomposeapp.domain.entities.PostComment
 
 sealed class CommentsScreenState {
 

@@ -1,7 +1,7 @@
 package com.example.firstcomposeapp.navigation
 
 import android.net.Uri
-import com.example.firstcomposeapp.domain.FeedPost
+import com.example.firstcomposeapp.domain.entities.FeedPost
 import com.google.gson.Gson
 
 sealed class Screen (

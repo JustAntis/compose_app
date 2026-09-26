@@ -1,6 +1,6 @@
 package com.example.firstcomposeapp.ui.theme
 
-import com.example.firstcomposeapp.domain.FeedPost
+import com.example.firstcomposeapp.domain.entities.FeedPost
 
 sealed class NewsFeedScreenState {
 

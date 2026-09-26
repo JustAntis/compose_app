@@ -38,6 +38,10 @@ android {
 
 
 dependencies {
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson.v300)
+    implementation(libs.coil.compose.v330)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.gson)
     implementation(libs.navigation.compose)
     implementation(libs.hilt.android)

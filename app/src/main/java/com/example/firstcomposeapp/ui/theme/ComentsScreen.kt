@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.firstcomposeapp.CommentsViewModel
-import com.example.firstcomposeapp.domain.FeedPost
-import com.example.firstcomposeapp.domain.PostComment
+import com.example.firstcomposeapp.domain.entities.FeedPost
+import com.example.firstcomposeapp.domain.entities.PostComment
 
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,8 +1,8 @@
 package com.example.firstcomposeapp
 
 import androidx.lifecycle.ViewModel
-import com.example.firstcomposeapp.domain.FeedPost
-import com.example.firstcomposeapp.domain.PostComment
+import com.example.firstcomposeapp.domain.entities.FeedPost
+import com.example.firstcomposeapp.domain.entities.PostComment
 import com.example.firstcomposeapp.ui.theme.CommentsScreenState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
