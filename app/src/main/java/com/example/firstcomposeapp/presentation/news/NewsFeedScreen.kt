@@ -1,4 +1,4 @@
-package com.example.firstcomposeapp.ui.theme
+package com.example.firstcomposeapp.presentation.news
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.firstcomposeapp.NewsFeedViewModel
 import com.example.firstcomposeapp.domain.entities.FeedPost
 
 @Composable

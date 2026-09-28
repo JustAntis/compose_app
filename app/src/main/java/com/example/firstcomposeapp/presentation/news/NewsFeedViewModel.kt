@@ -1,4 +1,4 @@
-package com.example.firstcomposeapp
+package com.example.firstcomposeapp.presentation.news
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -8,7 +8,6 @@ import com.example.firstcomposeapp.domain.entities.StatisticItem
 import com.example.firstcomposeapp.domain.entities.StatisticType
 import com.example.firstcomposeapp.domain.usecases.GetFeedPostsUseCase
 import com.example.firstcomposeapp.domain.usecases.LoadFeedPostsUseCase
-import com.example.firstcomposeapp.ui.theme.NewsFeedScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow

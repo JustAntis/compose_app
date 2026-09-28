@@ -1,4 +1,4 @@
-package com.example.firstcomposeapp.ui.theme
+package com.example.firstcomposeapp.samples
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

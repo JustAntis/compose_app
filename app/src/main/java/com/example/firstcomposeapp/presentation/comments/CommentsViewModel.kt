@@ -1,9 +1,8 @@
-package com.example.firstcomposeapp
+package com.example.firstcomposeapp.presentation.comments
 
 import androidx.lifecycle.ViewModel
 import com.example.firstcomposeapp.domain.entities.FeedPost
 import com.example.firstcomposeapp.domain.entities.PostComment
-import com.example.firstcomposeapp.ui.theme.CommentsScreenState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -14,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel(assistedFactory = CommentsViewModel.Factory::class)
 class CommentsViewModel @AssistedInject constructor(
-    @Assisted  val feedPost: FeedPost
+    @Assisted val feedPost: FeedPost
 ): ViewModel() {
 
     private val _stateScreen = MutableStateFlow<CommentsScreenState>(CommentsScreenState.Initial)

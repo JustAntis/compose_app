@@ -1,4 +1,4 @@
-package com.example.firstcomposeapp.ui.theme
+package com.example.firstcomposeapp.presentation.comments
 
 import com.example.firstcomposeapp.domain.entities.FeedPost
 import com.example.firstcomposeapp.domain.entities.PostComment

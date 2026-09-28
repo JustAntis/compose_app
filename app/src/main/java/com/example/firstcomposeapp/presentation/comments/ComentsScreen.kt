@@ -1,4 +1,4 @@
-package com.example.firstcomposeapp.ui.theme
+package com.example.firstcomposeapp.presentation.comments
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.firstcomposeapp.CommentsViewModel
 import com.example.firstcomposeapp.domain.entities.FeedPost
 import com.example.firstcomposeapp.domain.entities.PostComment
 
@@ -49,7 +48,7 @@ fun CommentsScreen(
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(text = "${feedPost.contentText}:${currentState.feedPost.id}", fontSize = 24.sp)
+                        Text(text = "Comments for feedPost id:${currentState.feedPost.id}", fontSize = 24.sp)
                     },
                     navigationIcon = {
                         IconButton(onClick = {

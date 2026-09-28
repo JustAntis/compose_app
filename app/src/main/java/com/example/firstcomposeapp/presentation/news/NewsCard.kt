@@ -1,4 +1,4 @@
-package com.example.firstcomposeapp.ui.theme
+package com.example.firstcomposeapp.presentation.news
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,6 +54,7 @@ fun NewsCard(
                     fontSize = 18.sp
                 )
             }
+            Spacer(modifier = Modifier.height(8.dp))
             AsyncImage(
                 modifier = Modifier.fillMaxWidth(),
                 model = feedPost.contentImageUrl,
@@ -164,12 +165,14 @@ private fun PostHeader(feedPost: FeedPost) {
                 .padding(8.dp),
         )
         Column() {
-            Text(text = feedPost.communityName)
-            Text(
-                text = feedPost.publicationDate,
-                fontWeight = FontWeight.ExtraLight,
-                modifier = Modifier.padding(top = 4.dp)
-            )
+            feedPost.communityName?.let { Text(text = it) }
+            feedPost.publicationDate?.let {
+                Text(
+                    text = it,
+                    fontWeight = FontWeight.ExtraLight,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
         }
         Spacer(modifier = Modifier.weight(1f))
         Icon(

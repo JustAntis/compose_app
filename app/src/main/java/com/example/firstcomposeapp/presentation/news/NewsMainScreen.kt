@@ -1,4 +1,4 @@
-package com.example.firstcomposeapp.ui.theme
+package com.example.firstcomposeapp.presentation.news
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -19,6 +19,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.firstcomposeapp.navigation.AppNavGraph
 import com.example.firstcomposeapp.navigation.rememberNavigationState
+import com.example.firstcomposeapp.presentation.comments.CommentsScreen
+import com.example.firstcomposeapp.presentation.main.NavigationItem
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
