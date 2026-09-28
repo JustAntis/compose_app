@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 
-class LemmyMapper @Inject constructor(){
+class FeedPostMapper @Inject constructor(){
     fun mapDtoToEntityModel(postViewDto: PostViewDto): FeedPost{
         return FeedPost(
             id = postViewDto.post.id,

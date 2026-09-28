@@ -26,20 +26,30 @@ class NewsFeedViewModel @Inject constructor(
         MutableStateFlow<NewsFeedScreenState>(NewsFeedScreenState.Initial)
     val screenState = _screenState.asStateFlow()
 
+    private var isLoading = false
+
     init {
-        viewModelScope.launch {
-            runCatching {
-                loadFeedPostsUseCase.invoke()
-            }.onFailure {
-                if (it is CancellationException) throw it
-                Log.e("VIEW_MODEL_TAG", "Load failed", it)
-            }
-        }
         viewModelScope.launch {
             feedPosts.collect {
                 _screenState.value = NewsFeedScreenState.Posts(it)
             }
         }
+        updateList()
+    }
+
+    fun updateList() {
+        if (isLoading) return
+        isLoading = true
+        viewModelScope.launch {
+            runCatching {
+                loadFeedPostsUseCase.invoke()
+            }.onFailure {
+                if (it is CancellationException) throw it
+                Log.e("VIEW_MODEL_TAG", "Load failed ${it.message}", it)
+            }
+            isLoading = false
+        }
+
     }
 
     fun onClickStatistic(item: StatisticItem, feedPost: FeedPost) {

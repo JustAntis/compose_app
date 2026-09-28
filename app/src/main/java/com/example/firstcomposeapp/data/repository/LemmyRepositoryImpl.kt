@@ -1,6 +1,6 @@
 package com.example.firstcomposeapp.data.repository
 
-import com.example.firstcomposeapp.data.mappers.LemmyMapper
+import com.example.firstcomposeapp.data.mappers.FeedPostMapper
 import com.example.firstcomposeapp.data.network.ApiService
 import com.example.firstcomposeapp.domain.entities.FeedPost
 import com.example.firstcomposeapp.domain.repositories.LemmyRepository
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.update
 @Singleton
 class LemmyRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
-    private val mapper: LemmyMapper
+    private val mapper: FeedPostMapper
 ):  LemmyRepository {
 
     private var nextPage: String? = null
