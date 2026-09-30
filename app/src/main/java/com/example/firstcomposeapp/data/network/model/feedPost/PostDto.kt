@@ -1,4 +1,4 @@
-package com.example.firstcomposeapp.data.network.model
+package com.example.firstcomposeapp.data.network.model.feedPost
 
 import com.google.gson.annotations.SerializedName
 

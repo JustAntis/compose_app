@@ -84,7 +84,7 @@ fun MainScreen() {
                     onBackPressed = {
                         navigationState.navHostController.popBackStack()
                     },
-                    feedPost = feedPost
+                    postId = feedPost.id
                 )
             }
         )

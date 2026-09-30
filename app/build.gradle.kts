@@ -38,6 +38,7 @@ android {
 
 
 dependencies {
+    implementation("com.squareup.okhttp3:logging-interceptor:5.5.0")
     implementation(libs.retrofit)
     implementation(libs.converter.gson.v300)
     implementation(libs.coil.compose.v330)

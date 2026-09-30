@@ -1,6 +1,6 @@
-package com.example.firstcomposeapp.data.network.model
+package com.example.firstcomposeapp.data.network.model.feedPost
 
-data class CountsDto(
+data class PostCountsDto(
     val comments: Int,
     val upvotes: Int,
     val downvotes: Int,

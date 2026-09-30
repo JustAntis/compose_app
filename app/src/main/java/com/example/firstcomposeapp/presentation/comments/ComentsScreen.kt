@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,21 +23,23 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.firstcomposeapp.domain.entities.FeedPost
+import coil3.compose.AsyncImage
+import com.example.firstcomposeapp.R
 import com.example.firstcomposeapp.domain.entities.PostComment
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentsScreen(
-    feedPost: FeedPost,
+    postId: Int,
     viewModel: CommentsViewModel = hiltViewModel(
         creationCallback = {
-            factory: CommentsViewModel.Factory -> factory.create(feedPost = feedPost)
+            factory: CommentsViewModel.Factory -> factory.create(postId = postId)
         }
     ),
     onBackPressed: () -> Unit
@@ -48,7 +51,7 @@ fun CommentsScreen(
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(text = "Comments for feedPost id:${currentState.feedPost.id}", fontSize = 24.sp)
+                        Text(text = "Comments for feedPost id:${currentState.postId}", fontSize = 24.sp)
                     },
                     navigationIcon = {
                         IconButton(onClick = {
@@ -81,15 +84,18 @@ private fun CommentItem(postComment: PostComment){
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
     ) {
-        Icon(
-            painter = painterResource(postComment.authorAvatarId),
+        AsyncImage(
+            model = postComment.authorAvatarId,
             contentDescription = null,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier
+                .clip(CircleShape)
+                .size(32.dp),
+            fallback = painterResource(R.drawable.person_circle_fill_svgrepo_com),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(
-                text = "${postComment.authorName} CommentId: ${postComment.id}",
+                text = postComment.authorName,
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurface
             )
