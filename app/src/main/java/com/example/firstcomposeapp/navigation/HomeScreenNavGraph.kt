@@ -40,6 +40,7 @@ fun NavGraphBuilder.homeScreenNavGraph(
                 avatarUrl = null,
                 contentText = null,
                 contentImageUrl = null,
+
             ))
         }
     }

@@ -13,7 +13,10 @@ class PostCommentMapper @Inject constructor() {
             authorName = postCommentDto.creator.displayName ?: postCommentDto.creator.name,
             authorAvatarId = postCommentDto.creator.avatar,
             commentText = postCommentDto.comment.content,
-            publicationDate = postCommentDto.comment.published.toFormattedDate()
+            publicationDate = postCommentDto.comment.published.toFormattedDate(),
+            score = postCommentDto.counts.score.toString(),
+            upVotes = postCommentDto.counts.upVotes.toString(),
+            downVotes = postCommentDto.counts.downVotes.toString(),
         )
     }
     fun mapListDtoToEntityList(response: CommentListResponse): List<PostComment>{

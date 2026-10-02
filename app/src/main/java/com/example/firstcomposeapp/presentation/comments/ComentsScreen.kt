@@ -1,5 +1,6 @@
 package com.example.firstcomposeapp.presentation.comments
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,8 +12,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardDoubleArrowDown
+import androidx.compose.material.icons.filled.KeyboardDoubleArrowUp
+import androidx.compose.material.icons.filled.SubdirectoryArrowRight
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -79,38 +87,71 @@ fun CommentsScreen(
 
 @Composable
 private fun CommentItem(postComment: PostComment){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        modifier = Modifier.fillMaxWidth().padding(16.dp)
     ) {
-        AsyncImage(
-            model = postComment.authorAvatarId,
-            contentDescription = null,
-            modifier = Modifier
-                .clip(CircleShape)
-                .size(32.dp),
-            fallback = painterResource(R.drawable.person_circle_fill_svgrepo_com),
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Column {
-            Text(
-                text = postComment.authorName,
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = postComment.commentText,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 14.sp
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = postComment.publicationDate,
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+        Column() {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
+            ) {
+                AsyncImage(
+                    model = postComment.authorAvatarId,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(32.dp),
+                    fallback = painterResource(R.drawable.person_circle_fill_svgrepo_com),
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Column {
+                    Text(
+                        text = postComment.authorName,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = postComment.commentText,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 14.sp
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = postComment.publicationDate,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            CommentItemScore(
+                upVotes = postComment.upVotes,
+                downVotes = postComment.downVotes,
+                score = postComment.score
             )
         }
+    }
+}
+
+@Composable
+fun CommentItemScore(upVotes: String, downVotes: String , score: String ){
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+    ) {
+        Icon(imageVector = Icons.Default.SubdirectoryArrowRight, contentDescription = null)
+        Text(text = score, fontSize = 16.sp)
+        Spacer(modifier = Modifier.weight(1f))
+        Icon(imageVector = Icons.Default.KeyboardDoubleArrowUp, contentDescription = null)
+        Text(text = upVotes, fontSize = 16.sp)
+        Icon(imageVector = Icons.Default.KeyboardDoubleArrowDown, contentDescription = null)
+        Text(text = downVotes, fontSize = 16.sp)
     }
 }
