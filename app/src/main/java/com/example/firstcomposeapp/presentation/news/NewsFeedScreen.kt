@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
@@ -30,7 +34,8 @@ import com.example.firstcomposeapp.domain.entities.FeedPost
 fun HomeScreen(
     viewModel: NewsFeedViewModel = hiltViewModel(),
     paddingValues: PaddingValues,
-    onCommentsClickListener:(FeedPost) -> Unit
+    onCommentsClickListener:(FeedPost) -> Unit,
+    snackBarHostState: SnackbarHostState
 ) {
     val screenState = viewModel.screenState.collectAsState()
 
@@ -42,8 +47,24 @@ fun HomeScreen(
             onCommentsClickListener = onCommentsClickListener
         )
         NewsFeedScreenState.Initial -> { }
+        NewsFeedScreenState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = Color.Black)
+            }
+        }
+        is NewsFeedScreenState.Error -> {
+            LaunchedEffect(currentState) {
+                val result = snackBarHostState.showSnackbar(
+                    message = currentState.message,
+                    actionLabel = "Retry",
+                    duration = SnackbarDuration.Indefinite
+                )
+                if (result == SnackbarResult.ActionPerformed) {
+                    viewModel.updateList()
+                }
+            }
+        }
     }
-
 }
 
 @Composable

@@ -6,4 +6,6 @@ sealed class NewsFeedScreenState {
 
     data class Posts(val posts: List<FeedPost>): NewsFeedScreenState()
     object Initial: NewsFeedScreenState()
+    object Loading: NewsFeedScreenState()
+    data class Error(val message: String): NewsFeedScreenState()
 }

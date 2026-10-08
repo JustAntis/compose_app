@@ -32,6 +32,7 @@ class NewsFeedViewModel @Inject constructor(
         viewModelScope.launch {
             feedPosts.collect {
                 _screenState.value = NewsFeedScreenState.Posts(it)
+                Log.d("VIEW_MODEL_TAG", "Size is:${it.size}")
             }
         }
         updateList()
@@ -39,6 +40,9 @@ class NewsFeedViewModel @Inject constructor(
 
     fun updateList() {
         if (isLoading) return
+        if(_screenState.value == NewsFeedScreenState.Posts(listOfNotNull())){
+            _screenState.value = NewsFeedScreenState.Loading
+        }
         isLoading = true
         viewModelScope.launch {
             runCatching {
@@ -46,10 +50,11 @@ class NewsFeedViewModel @Inject constructor(
             }.onFailure {
                 if (it is CancellationException) throw it
                 Log.e("VIEW_MODEL_TAG", "Load failed ${it.message}", it)
+                _screenState.value = NewsFeedScreenState.Error(it.message ?: "Something went wrong")
+                Log.e("VIEW_MODEL_TAG", "state: ${_screenState.value}")
             }
             isLoading = false
         }
-
     }
 
     fun onClickStatistic(item: StatisticItem, feedPost: FeedPost) {
