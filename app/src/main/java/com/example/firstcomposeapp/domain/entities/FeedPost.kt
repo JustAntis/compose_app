@@ -1,8 +1,10 @@
 package com.example.firstcomposeapp.domain.entities
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.Parcelize
 
+@Immutable
 @Parcelize
 data class FeedPost(
     val id: Int,

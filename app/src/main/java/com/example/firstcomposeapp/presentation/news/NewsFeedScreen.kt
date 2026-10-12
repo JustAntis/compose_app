@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,24 +35,39 @@ import com.example.firstcomposeapp.domain.entities.FeedPost
 fun HomeScreen(
     viewModel: NewsFeedViewModel = hiltViewModel(),
     paddingValues: PaddingValues,
-    onCommentsClickListener:(FeedPost) -> Unit,
+    onCommentsClickListener: (FeedPost) -> Unit,
     snackBarHostState: SnackbarHostState
 ) {
     val screenState = viewModel.screenState.collectAsState()
 
-    when(val currentState = screenState.value){
+    LaunchedEffect(Unit) {
+        viewModel.eventErrorChannel.collect {
+            val result = snackBarHostState.showSnackbar(
+                message = it,
+                actionLabel = "Retry",
+                duration = SnackbarDuration.Long
+            )
+            if (result == SnackbarResult.ActionPerformed) {
+                viewModel.updateList()
+            }
+        }
+    }
+    when (val currentState = screenState.value) {
         is NewsFeedScreenState.Posts -> FeedPosts(
             viewModel = viewModel,
             paddingValues = paddingValues,
             posts = currentState.posts,
-            onCommentsClickListener = onCommentsClickListener
+            onCommentsClickListener = onCommentsClickListener,
+            currentState.nextDataIsLoading
         )
-        NewsFeedScreenState.Initial -> { }
+
+        NewsFeedScreenState.Initial -> {}
         NewsFeedScreenState.Loading -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = Color.Black)
             }
         }
+
         is NewsFeedScreenState.Error -> {
             LaunchedEffect(currentState) {
                 val result = snackBarHostState.showSnackbar(
@@ -72,8 +88,9 @@ fun FeedPosts(
     viewModel: NewsFeedViewModel,
     paddingValues: PaddingValues,
     posts: List<FeedPost>,
-    onCommentsClickListener:(FeedPost) -> Unit
-){
+    onCommentsClickListener: (FeedPost) -> Unit,
+    nextDataIsLoading: Boolean
+) {
     val listState = rememberLazyListState()
     val shouldLoadMore by remember {
         derivedStateOf {
@@ -86,7 +103,11 @@ fun FeedPosts(
     LaunchedEffect(shouldLoadMore) {
         if (shouldLoadMore) viewModel.updateList()
     }
-    LazyColumn(contentPadding = paddingValues, verticalArrangement = Arrangement.spacedBy(8.dp), state = listState) {
+    LazyColumn(
+        contentPadding = paddingValues,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        state = listState
+    ) {
         items(posts, key = { it.id }) { feedPost ->
             val dismissState = rememberSwipeToDismissBoxState()
             SwipeToDismissBox(
@@ -133,6 +154,18 @@ fun FeedPosts(
                         viewModel.onClickStatistic(feedPost = feedPost, item = it)
                     },
                 )
+            }
+        }
+        if (nextDataIsLoading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
         }
     }

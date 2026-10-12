@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import com.example.firstcomposeapp.presentation.news.MainScreen
 import com.example.firstcomposeapp.ui.theme.FirstComposeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 

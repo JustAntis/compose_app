@@ -10,8 +10,10 @@ import com.example.firstcomposeapp.domain.usecases.GetFeedPostsUseCase
 import com.example.firstcomposeapp.domain.usecases.LoadFeedPostsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -26,6 +28,9 @@ class NewsFeedViewModel @Inject constructor(
         MutableStateFlow<NewsFeedScreenState>(NewsFeedScreenState.Initial)
     val screenState = _screenState.asStateFlow()
 
+    private val _eventErrorChannel = Channel<String>(Channel.BUFFERED)
+    val eventErrorChannel = _eventErrorChannel.receiveAsFlow()
+
     private var isLoading = false
 
     init {
@@ -37,21 +42,45 @@ class NewsFeedViewModel @Inject constructor(
         }
         updateList()
     }
-
     fun updateList() {
         if (isLoading) return
-        if(_screenState.value == NewsFeedScreenState.Posts(listOfNotNull())){
-            _screenState.value = NewsFeedScreenState.Loading
-        }
         isLoading = true
+        when (val state = _screenState.value) {
+            is NewsFeedScreenState.Posts -> {
+                if (state.posts.isEmpty()) {
+                    _screenState.value = NewsFeedScreenState.Loading
+                } else {
+                    _screenState.value = state.copy(nextDataIsLoading = true)
+                }
+            }
+
+            else -> {
+                _screenState.value = NewsFeedScreenState.Loading
+            }
+        }
         viewModelScope.launch {
             runCatching {
                 loadFeedPostsUseCase.invoke()
             }.onFailure {
                 if (it is CancellationException) throw it
+                val errorMessage = it.message ?: "Something Went Wrong"
+                when (val state = _screenState.value) {
+                    is NewsFeedScreenState.Posts -> {
+                        if (state.posts.isNotEmpty()) {
+                            _eventErrorChannel.send(errorMessage)
+                        }
+                    }
+
+                    else -> {
+                        _screenState.value = NewsFeedScreenState.Error(errorMessage)
+                    }
+                }
                 Log.e("VIEW_MODEL_TAG", "Load failed ${it.message}", it)
-                _screenState.value = NewsFeedScreenState.Error(it.message ?: "Something went wrong")
                 Log.e("VIEW_MODEL_TAG", "state: ${_screenState.value}")
+            }
+            val currentState = _screenState.value
+            if (currentState is NewsFeedScreenState.Posts) {
+                _screenState.value = currentState.copy(nextDataIsLoading = false)
             }
             isLoading = false
         }
